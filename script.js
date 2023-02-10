@@ -1,18 +1,29 @@
-function present(code, url) {
-    document.getElementById("root").innerHTML = "<h1> Text </h1>";
-    document.title = "Text";
-    window.history.pushState({"html":response.html,"pageTitle":response.pageTitle},"Text", url);
+//@ts-check
+
+/**
+ * Set displayed page
+ * 
+ * @param {String} html - html string page
+ */
+function setPage(html) {
+    var page = document.createElement("html")
+    let element = document.getElementById("root");
+    if (element) {
+        element.innerHTML = html;
+    }
 }
 
 window.onpopstate = (e) => {
-    if(e.state){
-        document.getElementById("root").innerHTML = e.state.html;
+    if(e.state) {
+        setPage(e.state.html);
         document.title = e.state.pageTitle;
     }
 };
 
-const html = "<h1> Text </h1>"
-const doc = new DOMParser().parseFromString(html, 'text/html');
-doc.title; doc.body;
-
-present(doc, "/nice")
+window.onload = () => {
+    let request = new XMLHttpRequest();
+    request.open("GET", "/pages/welcome.html", false);
+    request.send();
+    let html = request.responseText;
+    setPage(html)
+};

@@ -1,0 +1,137 @@
+:root {
+    --primary-color: #bbb;
+    --secondary-color: #eee;
+    --tertiary-color: #333;
+    --background-color: #222;
+    --keyword-color: #d4a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    padding-inline: 0;
+    color: var(--primary-color);
+    font-weight: 100;
+}
+
+body {
+    font-family: monospace;
+    background-color: var(--background-color);
+    padding: 2rem calc(max(2rem, 10vw));
+}
+
+/* HEADERS */
+
+/* text */
+
+h1, h2, h3 {
+    color: var(--secondary-color)
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+/* spacing */
+
+h1 {
+    padding-top: 1rem;
+}
+
+h2 {
+    padding-top: 2.5rem;
+}
+
+h3 {
+    padding-top: .5rem;
+}
+
+/* before */
+
+:where(h1, h2, h3)::before {
+    color: var(--keyword-color);
+}
+
+h1::before {
+    content: "# ";
+}
+
+h2::before {
+    content: "## ";
+}
+
+h3::before {
+    content: "### ";
+}
+
+/* PARAGRAPH */
+
+/* text */
+
+p, code, li {
+    font-size: 1rem;
+}
+
+/* spacing */
+
+p, code, li {
+    padding-top: .5rem;
+}
+
+/* p {
+    text-indent: 1.5rem;
+} */
+
+a {
+    color: var(--secondary-color);
+}
+
+code {
+    display: block;
+    background-color: var(--tertiary-color);
+    margin: 1rem 0;
+    padding: 1rem 0 0;
+    border-radius: .5rem;
+    padding-left: 1.5rem;
+    overflow-x: auto;
+}
+
+.code {
+    background-color: #333;
+    padding: .25rem;
+    margin: -.25rem;
+    border-radius: .5rem;
+}
+
+.keyword {
+    color: #d4a;
+}
+
+.type, .wrapper {
+    color: var(--secondary-color)
+}
+
+/* LIST */
+
+/* dots */
+
+ul > li::before {
+    content: "+ ";
+    display: inline-block;
+    color: var(--keyword-color);
+    width: 1rem;
+    margin-left: -1rem;
+    font-weight: 900;
+}
+ul {
+    list-style: none;
+    margin-left: 1rem;
+}

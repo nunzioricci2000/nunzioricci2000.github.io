@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>UserDefaults</h1>
+    <h2>What UserDefaults do</h2>
+    <p> Let’s say you create an application with some 
+        settings you want to store. For example you 
+        want to create a game that stores the high 
+        score. That's where UserDefaults come in. </p>
+    <p> UserDefaults provides a way to save files 
+        with a pair of keys and values; keys are 
+        Strings and values can be a variety of 
+        types(see docs for more info). To access 
+        this data you need an instance of UserDefaults, 
+        in most cases you can use “standard” that is 
+        a static property of UserDefaults already 
+        defined in Foundation, creation of its instances 
+        is a topic postponed to the next updates. </p>
+    <h2>How to use them</h2>
+    <p>UserDefaults are pretty easy to use. If you want
+        to save a value you can use this code:</p>
+    <code>
+        <pre>
+<span class="type">UserDefaults</span>.standard.set(value, forKey: "keyName")
+        </pre>
+    </code>
+    <p>If you want to retrieve this value from the 
+        storage, UserDefaults provide a variety of 
+        methods to call depending on which type data 
+        you want to get, for example let’s say that 
+        the previous value is an integer, we can 
+        retrieve it with:</p>
+    <code>
+        <pre>
+value = UserDefaults.standard.integer(forKey: "keyName")
+        </pre>
+    </code>
+    <p>And that's it. There is not much more to add on the
+        topic UserDefaults are so easy to implement and I
+        hope this helped.
+    </p>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Wrappers</h1>
+    <h2>Requirements</h2>
+    <ul>
+        <li><a href="">Computed properties</a></li>
+        <li><a href="">Structs</a></li>
+    </ul>
+    <h2>What wrappers do</h2>
+    <p>
+        Let’s say that we have a wrapper called <span class="code type">@Wrapper</span>
+        what happens when you wrap a variable with it?
+    </p>
+    <code>
+        <pre>
+<span class="wrapper">@<span class="type">Wrapper</span></span> <span class="keyword">var</span> variable: <span class="type">Int</span>
+        </pre>
+    </code>
+    <code>
+        <pre>
+<span class="keyword">var</span> _variable = <span class="type">Wrapper</span>()
+
+<span class="keyword">var</span> variable: <span class="type">Int</span> {
+    <span class="keyword">get</span> {
+        _variable.wrappedValue
+    }
+    <span class="keyword">set</span> {
+        _variable.wrappedValue = newValue
+    }
+}
+        </pre>
+    </code>
+    <p>Two blocks above have pretty the same behavior. 
+        When we wrap a variable we are declaring that 
+        the var we are wrapping is a computed property 
+        that simply access to the wrappedValue property 
+        of a Wrapper instance. <span class="code">_variable</span> is an effective 
+        variable that you can indeed use in the code 
+        (you can try with a state variables in SwiftUI).</p>
+    <h2>But how can we create it?</h2>
+    <p>Creating it is pretty simple you have 
+        to create an object in the such way:</p>
+    <code>
+        <pre>
+<span class="wrapper">@propertyWrapper</span>
+<span class="keyword">struct</span> <span class="type">Wrapper</span> {
+    <span class="keyword">var</span> wrappedValue: <span class="type">Int</span> = 0
+}
+        </pre>
+    </code>
+    <p>As you can see is only a struct wrapped with 
+        propertyWrapper and with a property called 
+        wrappedValue. Obviously this is the variable 
+        we spoke about in the previous chapter, the 
+        one that you access by calling the wrapped 
+        variable.</p>
+    <p>But written like this isn’t really useful, 
+        right? So lets se a real use case:</p>
+    <code>
+        <pre>
+<span class="wrapper">@propertyWrapper</span>
+<span class="keyword">struct</span> <span class="type">Wrapper</span> {
+    <span class="keyword">var</span> projectedValue: <span class="type">Int</span> = 0
+    
+    <span class="keyword">var</span> wrappedValue: <span class="type">Int</span> {
+        <span class="keyword">get</span> { projectedValue }
+        <span class="keyword">set</span> { projectedValue = min(projectedValue, 100) }
+    }
+}
+        </pre>
+    </code>
+    <p>Now we declared a new property called 
+        <span class="code">projectedValue</span> and the <span class="code">wrappedValue</span> is 
+        a computed property that set <span class="code">projectedValue</span> 
+        with <span class="code">100</span> as max possible value.</p>
+    <p>Come on, now do a couple of tests and 
+        come back here as soon as you encounter
+        any problems.</p>
+    <h2>Set initial value</h2>
+    <p>If you tried something like this:</p>
+    <code>
+        <pre>
+<span class="wrapper">@<span class="type">Wrapper</span></span> <span class="keyword">var</span> variable = 0
+        </pre>
+    </code>
+    <p>You probably noticed that Xcode gives 
+        you this error: <span class="code">Extra argument 'wrappedValue'
+            in call</span>. If you remember in What wrappers do, when 
+        we wrap a variable we create an instance of 
+        the wrapper in the variable <span class="code">_variable</span>. In this
+        case when we give an initial value to the property 
+        this value is passed to the initializer of <span class="code">Wrapper</span> 
+        in that way:</p>
+    <code>
+        <pre>
+<span class="keyword">var</span> _variabe = <span class="type">Wrapper</span>(wrappedValue: 0)
+<span class="keyword">var</span> variable: <span class="type">Int</span> {
+    <span class="keyword">get</span> {
+        _variable.wrappedValue
+    }
+    <span class="keyword">set</span> {
+        _variable.wrappedValue = newValue
+    }
+}
+        </pre>
+    </code>
+    <p>So we can update the wrapper in 
+        the previous chapter with our 
+        new knowledge:</p>
+    <code>
+        <pre>
+<span class="wrapper">@propertyWrapper</span>
+<span class="keyword">struct</span> <span class="type">HighScore</span> {
+    <span class="keyword">var</span> projectedValue: <span class="type">Int</span>
+    
+    <span class="keyword">var</span> wrappedValue: <span class="type">Int</span> {
+        <span class="keyword">get</span> { projectedValue }
+        <span class="keyword">set</span> { projectedValue = min(projectedValue, 100) }
+    }
+    
+    init() {
+        self.projectedValue = 0
+    }
+    
+    init(wrappedValue: <span class="type">Int</span>) {
+        self.projectedValue = wrappedValue
+    }
+}
+        </pre>
+    </code>
+    <p>So now we created two new initializers: </p>
+    <ul>
+        <li>The first one is the initializer that is 
+            called when you don’t get an initial value;</li>
+        <li>The second one is the initializer that take
+             the initial value and save it in the projectedValue.</li>
+    </ul>
+    <h2>
+        Custom initializer
+    </h2>
+    <p>What if we want to pass custom values to our
+        wrapper? If you already seen a wrapper like 
+        <span class="wrapper code">@AppStorage</span> you might have noticed that it 
+        accepts an attribute, es.:</p>
+    <code>
+        <pre>
+<span class="wrapper">@<span class="type">AppStorage</span></span>("highScore") <span class="keyword">var</span> highScore: <span class="type">Int</span> = 0
+        </pre>
+    </code>
+    <p>As you can see in the brackets we have a 
+        string that is passed to AppStorage initializer.
+         How it works? If you are on Xcode you can 
+         do option+click on @AppStorage to see 
+         the definition and we can find this code:</p>
+    <code>
+        <pre>
+<span class="keyword">public</span> init(wrappedValue: <span class="type">Value</span>, _ key: <span class="type">String</span>, store: <span class="type">UserDefaults</span>? = nil) <span class="keyword">where</span> <span class="type">Value</span> == <span class="type">Int</span>
+        </pre>
+    </code>
+    <p>From this you will have understood the mechanism: 
+        When you passing an argument to the wrapper is 
+        the same thing as passing to initializer.</p>
+    
+</body>
+</html>
